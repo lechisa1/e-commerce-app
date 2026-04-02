@@ -10,11 +10,11 @@ services:
       POSTGRES_DB: ${DB_NAME:-ecommerce}
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
-      - "${DB_PORT:-5432}:5432"
+      - '${DB_PORT:-5432}:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-ecommerce}"]
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER:-ecommerce}']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -29,18 +29,28 @@ services:
     container_name: e-commerce-app
     restart: unless-stopped
     ports:
-      - "${APP_PORT:-3000}:3000"
+      - '${APP_PORT:-3000}:3000'
     environment:
       NODE_ENV: ${NODE_ENV:-production}
       PORT: ${APP_PORT:-3000}
       DATABASE_URL: postgresql://${DB_USER:-ecommerce}:${DB_PASSWORD:-ecommerce_password}@postgres:5432/${DB_NAME:-ecommerce}
+      JWT_SECRET: ${JWT_SECRET:-default-jwt-secret-change-in-production}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
     depends_on:
       postgres:
         condition: service_healthy
     networks:
       - ecommerce-network
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      test:
+        [
+          'CMD',
+          'wget',
+          '--quiet',
+          '--tries=1',
+          '--spider',
+          'http://localhost:3000',
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
