@@ -1,98 +1,171 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# E-Commerce API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A production-ready NestJS e-commerce backend API with Prisma 6 ORM, PostgreSQL database, and Docker containerization.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- **Authentication**: JWT-based authentication with Passport.js
+- **User Management**: Complete CRUD operations with role-based access control
+- **Products & Categories**: Full product catalog management
+- **Shopping Cart**: Cart and cart items management
+- **Orders**: Order processing and tracking
+- **Payments**: Payment integration support
+- **Reviews**: Product review system
+- **Wishlist**: Customer wishlist functionality
+- **Coupons**: Discount coupon system
+- **Swagger Documentation**: Interactive API documentation at `/api-docs`
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tech Stack
 
-## Project setup
+- **Framework**: NestJS 11.x
+- **ORM**: Prisma 6.x with PostgreSQL
+- **Authentication**: JWT + Passport.js
+- **Validation**: class-validator & class-transformer
+- **Documentation**: Swagger/OpenAPI
+- **Containerization**: Docker & Docker Compose
 
-```bash
-$ npm install
-```
+## Quick Start
 
-## Compile and run the project
+### Prerequisites
 
-```bash
-# development
-$ npm run start
+- Node.js 20+
+- Docker & Docker Compose
+- PostgreSQL (or use Docker)
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
+### Development Setup
 
 ```bash
-# unit tests
-$ npm run test
+# Install dependencies
+npm install
 
-# e2e tests
-$ npm run test:e2e
+# Generate Prisma Client
+npx prisma generate
 
-# test coverage
-$ npm run test:cov
+# Run database migrations
+npx prisma migrate dev
+
+# Start development server
+npm run start:dev
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Docker Setup (Recommended)
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Start all services (PostgreSQL + API)
+docker-compose up -d
+
+# Apply migrations
+docker-compose exec app npx prisma migrate deploy
+
+# View logs
+docker-compose logs -f app
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+The API will be available at: http://localhost:3000
+Swagger documentation at: http://localhost:3000/api-docs
 
-## Resources
+## Environment Variables
 
-Check out a few resources that may come in handy when working with NestJS:
+Copy `.env.example` to `.env` and configure:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/ecommerce"
+JWT_SECRET="your-secret-key"
+JWT_EXPIRES_IN="7d"
+NODE_ENV="development"
+```
 
-## Support
+## API Endpoints
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Authentication
 
-## Stay in touch
+| Method | Endpoint             | Description       |
+| ------ | -------------------- | ----------------- |
+| POST   | `/api/auth/register` | Register new user |
+| POST   | `/api/auth/login`    | Login user        |
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Users
+
+| Method | Endpoint                     | Description              |
+| ------ | ---------------------------- | ------------------------ |
+| GET    | `/api/users`                 | List all users           |
+| GET    | `/api/users/:id`             | Get user by ID           |
+| GET    | `/api/users/profile`         | Get current user profile |
+| PATCH  | `/api/users/profile`         | Update profile           |
+| PATCH  | `/api/users/:id`             | Update user              |
+| POST   | `/api/users/change-password` | Change password          |
+| DELETE | `/api/users/:id`             | Soft delete user         |
+| DELETE | `/api/users/:id/hard`        | Hard delete user         |
+
+## Project Structure
+
+```
+src/
+├── auth/           # Authentication module
+├── user/           # User management module
+├── prisma/         # Prisma service module
+├── app.controller  # Root controller
+└── main.ts         # Application entry point
+
+prisma/
+├── schema.prisma    # Database schema
+└── migrations/      # Database migrations
+
+generated/          # Prisma generated types
+```
+
+## Database Schema
+
+The application includes models for:
+
+- Users & Sessions
+- Products & Categories
+- Orders & Order Items
+- Cart & Cart Items
+- Payments & Refunds
+- Reviews & Wishlists
+- Coupons & Notifications
+
+## Scripts
+
+```bash
+# Development
+npm run start:dev      # Watch mode
+npm run start:debug    # Debug mode
+
+# Production
+npm run build          # Build
+npm run start:prod     # Production mode
+
+# Database
+npx prisma generate    # Generate Prisma Client
+npx prisma migrate     # Run migrations
+npx prisma studio      # Open Prisma Studio
+
+# Testing
+npm run test           # Unit tests
+npm run test:e2e       # E2E tests
+```
+
+## Docker Commands
+
+```bash
+# Start services
+docker-compose up -d
+
+# Rebuild after changes
+docker-compose up -d --build
+
+# Stop services
+docker-compose down
+
+# Remove orphans
+docker-compose down --remove-orphans
+
+# Access app container
+docker-compose exec app sh
+```
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+MIT License
