@@ -241,11 +241,16 @@ model ProductTag {
 }
 
 // Shopping Cart
-model Cart {
-  id     String @id @default(cuid())
-  userId String @unique @map("user_id")
+// Add to your schema.prisma if not already present
 
-  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Cart {
+  id             String   @id @default(cuid())
+  userId         String?  @unique @map("user_id")
+  sessionId      String?  @unique @map("session_id")
+  couponCode     String?  @map("coupon_code")
+  couponDiscount Decimal? @map("coupon_discount") @db.Decimal(10, 2)
+
+  user  User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   items CartItem[]
 
   createdAt DateTime @default(now()) @map("created_at")

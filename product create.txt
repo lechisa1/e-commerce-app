@@ -1,0 +1,70 @@
+// Create a product
+POST /products
+Authorization: Bearer <admin_token>
+{
+  "name": "iPhone 15 Pro",
+  "description": "The latest iPhone with advanced features including A17 Pro chip...",
+  "shortDescription": "Latest smartphone from Apple",
+  "sku": "IPH-15-PRO-001",
+  "price": 999.99,
+  "compareAtPrice": 1099.99,
+  "quantity": 100,
+  "categoryId": "cat_123",
+  "isActive": true,
+  "isFeatured": true,
+  "tags": ["apple", "iphone", "smartphone"],
+  "images": [
+    {
+      "url": "https://example.com/iphone-main.jpg",
+      "alt": "iPhone 15 Pro front view",
+      "isMain": true,
+      "order": 0
+    }
+  ],
+  "attributes": [
+    { "name": "Color", "value": "Natural Titanium" },
+    { "name": "Storage", "value": "256GB" }
+  ],
+  "variants": [
+    {
+      "sku": "IPH-15-PRO-256-NAT",
+      "price": 999.99,
+      "quantity": 50,
+      "attributes": { "color": "Natural Titanium", "storage": "256GB" }
+    }
+  ]
+}
+
+// Response
+{
+  "id": "prod_123",
+  "name": "iPhone 15 Pro",
+  "slug": "iphone-15-pro",
+  "price": 999.99,
+  "quantity": 100,
+  "images": [...],
+  "variants": [...],
+  "averageRating": 0,
+  "reviewCount": 0
+}
+
+// Get products with filters
+GET /products?page=1&limit=20&minPrice=500&maxPrice=1500&isActive=true&sortBy=price&sortOrder=asc
+
+// Add product review
+POST /products/prod_123/reviews
+Authorization: Bearer <user_token>
+{
+  "rating": 5,
+  "title": "Amazing product!",
+  "comment": "Best iPhone I've ever owned"
+}  
+
+// Update stock
+PATCH /products/prod_123/stock
+Authorization: Bearer <admin_token>
+{
+  "productId": "prod_123",
+  "quantity": 50,
+  "note": "Restocked from supplier"
+}

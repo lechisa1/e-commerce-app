@@ -9,6 +9,8 @@ import { AddressModule } from './address/address.module';
 import { CategoryModule } from './category/category.module';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { ProductModule } from './product/product.module';
+import { CartModule } from './cart/cart.module';
 @Module({
   imports: [
     PrismaModule,
@@ -16,6 +18,8 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     AuthModule,
     AddressModule,
     CategoryModule,
+    ProductModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [
