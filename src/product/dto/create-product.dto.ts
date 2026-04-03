@@ -4,7 +4,6 @@ import {
   IsBoolean,
   IsNumber,
   IsArray,
-  IsUUID,
   Min,
   MaxLength,
   MinLength,
@@ -14,6 +13,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsCuid } from '../../common/decorators/is-cuid.decorator';
 
 export class ProductImageDto {
   @ApiProperty({ example: 'https://example.com/image.jpg' })
@@ -178,7 +178,7 @@ export class CreateProductDto {
 
   @ApiPropertyOptional({ example: 'category-id' })
   @IsOptional()
-  @IsUUID()
+  @IsCuid()
   categoryId?: string;
 
   @ApiPropertyOptional({ type: [String], example: ['tag1', 'tag2'] })

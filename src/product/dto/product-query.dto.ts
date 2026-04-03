@@ -6,11 +6,11 @@ import {
   Min,
   Max,
   IsString,
-  IsUUID,
   IsEnum,
 } from 'class-validator';
 import { Type, Transform } from 'class-transformer';
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsCuid } from '../../common/decorators/is-cuid.decorator';
 
 export enum ProductSortField {
   NAME = 'name',
@@ -44,7 +44,7 @@ export class ProductQueryDto {
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsUUID()
+  @IsCuid()
   categoryId?: string;
 
   @ApiPropertyOptional()

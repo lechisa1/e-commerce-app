@@ -10,8 +10,8 @@ import {
   UseGuards,
   HttpStatus,
   HttpCode,
-  ParseUUIDPipe,
 } from '@nestjs/common';
+import { ParseCuidPipe } from '../common/pipes/parse-cuid.pipe';
 import {
   ApiTags,
   ApiOperation,
@@ -112,7 +112,7 @@ export class CategoryController {
     status: HttpStatus.OK,
     description: 'Returns category breadcrumb',
   })
-  async getBreadcrumb(@Param('id', ParseUUIDPipe) id: string) {
+  async getBreadcrumb(@Param('id', ParseCuidPipe) id: string) {
     return this.categoryService.getCategoryBreadcrumb(id);
   }
 
@@ -129,7 +129,7 @@ export class CategoryController {
     description: 'Category not found',
   })
   async findOne(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseCuidPipe) id: string,
     @Query('includeProducts') includeProducts?: string,
   ): Promise<CategoryResponseDto> {
     const category = await this.categoryService.findOne(
@@ -175,7 +175,7 @@ export class CategoryController {
     description: 'Category slug already exists',
   })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseCuidPipe) id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ): Promise<CategoryResponseDto> {
     const category = await this.categoryService.update(id, updateCategoryDto);
@@ -194,7 +194,7 @@ export class CategoryController {
     type: CategoryResponseDto,
   })
   async toggleActive(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseCuidPipe) id: string,
   ): Promise<CategoryResponseDto> {
     const category = await this.categoryService.toggleActive(id);
     return plainToClass(CategoryResponseDto, category);
@@ -253,7 +253,7 @@ export class CategoryController {
     description: 'Category has children or products',
   })
   async remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseCuidPipe) id: string,
     @Query('force') force?: string,
   ): Promise<void> {
     await this.categoryService.remove(id, force === 'true');

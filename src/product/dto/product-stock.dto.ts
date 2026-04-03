@@ -1,14 +1,15 @@
-import { IsString, IsInt, Min, IsOptional, IsUUID } from 'class-validator';
+import { IsString, IsInt, Min, IsOptional } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsCuid } from '../../common/decorators/is-cuid.decorator';
 
 export class UpdateStockDto {
   @ApiProperty()
-  @IsUUID()
+  @IsCuid()
   productId: string;
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsUUID()
+  @IsCuid()
   variantId?: string;
 
   @ApiProperty({ example: 10 })

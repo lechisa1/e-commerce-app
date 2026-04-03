@@ -1,6 +1,15 @@
 import { Expose, Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
+const toNumber = (value: any): number | null => {
+  if (value === null || value === undefined) return null;
+
+  if (typeof value === 'object' && value.toNumber) {
+    return value.toNumber();
+  }
+
+  return Number(value);
+};
 export class ProductImageResponseDto {
   @ApiProperty()
   id: string;
@@ -26,6 +35,7 @@ export class ProductVariantResponseDto {
   sku: string;
 
   @ApiProperty()
+  @Transform(({ value }) => toNumber(value))
   price: number;
 
   @ApiProperty()
@@ -73,14 +83,17 @@ export class ProductResponseDto {
 
   @ApiProperty()
   @Expose()
+  @Transform(({ value }) => toNumber(value))
   price: number;
 
   @ApiProperty()
   @Expose()
+  @Transform(({ value }) => toNumber(value))
   compareAtPrice?: number;
 
   @ApiProperty()
   @Expose()
+  @Transform(({ value }) => toNumber(value))
   cost?: number;
 
   @ApiProperty()
@@ -101,6 +114,7 @@ export class ProductResponseDto {
 
   @ApiProperty()
   @Expose()
+  @Transform(({ value }) => toNumber(value))
   weight?: number;
 
   @ApiProperty()

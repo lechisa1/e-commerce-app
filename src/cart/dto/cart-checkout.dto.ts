@@ -1,6 +1,7 @@
-import { IsUUID, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsCuid } from '../../common/decorators/is-cuid.decorator';
 
 export class CheckoutAddressDto {
   @ApiProperty()
@@ -37,7 +38,7 @@ export class CheckoutAddressDto {
 export class CartCheckoutDto {
   @ApiPropertyOptional()
   @IsOptional()
-  @IsUUID()
+  @IsCuid()
   addressId?: string;
 
   @ApiPropertyOptional({ type: CheckoutAddressDto })

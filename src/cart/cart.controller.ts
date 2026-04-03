@@ -10,8 +10,8 @@ import {
   HttpStatus,
   HttpCode,
   Req,
-  ParseUUIDPipe,
 } from '@nestjs/common';
+import { ParseCuidPipe } from '../common/pipes/parse-cuid.pipe';
 import {
   ApiTags,
   ApiOperation,
@@ -104,7 +104,7 @@ export class CartController {
   async removeCartItem(
     @CurrentUser('id') userId: string | null,
     @Req() req: Request,
-    @Param('itemId', ParseUUIDPipe) itemId: string,
+    @Param('itemId', ParseCuidPipe) itemId: string,
   ): Promise<CartResponseDto> {
     const sessionId = this.getSessionId(req);
     return this.cartService.removeCartItem(userId, sessionId, itemId);

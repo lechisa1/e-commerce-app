@@ -10,8 +10,8 @@ import {
   UseGuards,
   HttpStatus,
   HttpCode,
-  ParseUUIDPipe,
 } from '@nestjs/common';
+import { ParseCuidPipe } from '../common/pipes/parse-cuid.pipe';
 import {
   ApiTags,
   ApiOperation,
@@ -102,7 +102,7 @@ export class UserController {
   })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
   async findOne(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseCuidPipe) id: string,
   ): Promise<UserResponseDto> {
     const user = await this.userService.findOne(id);
     return plainToClass(UserResponseDto, user);
@@ -136,7 +136,7 @@ export class UserController {
     type: UserResponseDto,
   })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseCuidPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<UserResponseDto> {
     const user = await this.userService.update(id, updateUserDto);
@@ -174,7 +174,7 @@ export class UserController {
     description: 'User status toggled successfully',
   })
   async toggleActive(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseCuidPipe) id: string,
   ): Promise<UserResponseDto> {
     const user = await this.userService.toggleActive(id);
     return plainToClass(UserResponseDto, user);
@@ -190,7 +190,7 @@ export class UserController {
     description: 'User role updated successfully',
   })
   async updateRole(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseCuidPipe) id: string,
     @Body('role') role: Role,
   ): Promise<UserResponseDto> {
     const user = await this.userService.updateRole(id, role);
@@ -207,7 +207,7 @@ export class UserController {
     status: HttpStatus.NO_CONTENT,
     description: 'User deactivated successfully',
   })
-  async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+  async remove(@Param('id', ParseCuidPipe) id: string): Promise<void> {
     await this.userService.remove(id);
   }
 
@@ -221,7 +221,7 @@ export class UserController {
     status: HttpStatus.NO_CONTENT,
     description: 'User deleted permanently',
   })
-  async hardDelete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+  async hardDelete(@Param('id', ParseCuidPipe) id: string): Promise<void> {
     await this.userService.hardDelete(id);
   }
 }

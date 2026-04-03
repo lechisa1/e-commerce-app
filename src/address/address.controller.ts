@@ -11,8 +11,8 @@ import {
   UseGuards,
   HttpStatus,
   HttpCode,
-  ParseUUIDPipe,
 } from '@nestjs/common';
+import { ParseCuidPipe } from '../common/pipes/parse-cuid.pipe';
 import {
   ApiTags,
   ApiOperation,
@@ -121,7 +121,7 @@ export class AddressController {
   })
   async findOne(
     @CurrentUser('id') userId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseCuidPipe) id: string,
   ): Promise<AddressResponseDto> {
     const address = await this.addressService.findOne(userId, id);
     return plainToClass(AddressResponseDto, address);
@@ -140,7 +140,7 @@ export class AddressController {
   })
   async update(
     @CurrentUser('id') userId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseCuidPipe) id: string,
     @Body() updateAddressDto: UpdateAddressDto,
   ): Promise<AddressResponseDto> {
     const address = await this.addressService.update(
@@ -165,7 +165,7 @@ export class AddressController {
   })
   async setDefault(
     @CurrentUser('id') userId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseCuidPipe) id: string,
   ): Promise<AddressResponseDto> {
     const address = await this.addressService.setDefault(userId, id);
     return plainToClass(AddressResponseDto, address);
@@ -188,7 +188,7 @@ export class AddressController {
   })
   async remove(
     @CurrentUser('id') userId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseCuidPipe) id: string,
   ): Promise<void> {
     await this.addressService.remove(userId, id);
   }

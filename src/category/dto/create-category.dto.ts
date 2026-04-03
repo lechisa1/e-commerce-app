@@ -6,9 +6,9 @@ import {
   Min,
   MaxLength,
   Matches,
-  IsUUID,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsCuid } from '../../common/decorators/is-cuid.decorator';
 
 export class CreateCategoryDto {
   @ApiProperty({ example: 'Electronics' })
@@ -43,7 +43,7 @@ export class CreateCategoryDto {
 
   @ApiPropertyOptional({ example: 'parent-category-id' })
   @IsOptional()
-  @IsUUID()
+  @IsCuid()
   parentId?: string;
 
   @ApiPropertyOptional({ default: true })

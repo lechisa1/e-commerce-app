@@ -11,8 +11,9 @@ import {
   UseGuards,
   HttpStatus,
   HttpCode,
-  ParseUUIDPipe,
 } from '@nestjs/common';
+import { plainToInstance } from 'class-transformer';
+import { ParseCuidPipe } from '../common/pipes/parse-cuid.pipe';
 import {
   ApiTags,
   ApiOperation,
@@ -29,7 +30,7 @@ import { CreateReviewDto } from './dto/product-review.dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Public } from '../auth/decorators/public.decorator';
-import { Role } from '@prisma/client';
+import { Role, Product } from '@prisma/client';
 import { plainToClass } from 'class-transformer';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
@@ -80,7 +81,7 @@ export class ProductController {
   @Public()
   @ApiOperation({ summary: 'Get related products' })
   async getRelatedProducts(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseCuidPipe) id: string,
     @Query('limit') limit?: number,
   ) {
     return this.productService.getRelatedProducts(id, limit);
@@ -95,9 +96,9 @@ export class ProductController {
     type: ProductResponseDto,
   })
   async findOne(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseCuidPipe) id: string,
   ): Promise<ProductResponseDto> {
-    const product = await this.productService.findOne(id);
+    const product = (await this.productService.findOne(id)) as Product;
     return plainToClass(ProductResponseDto, product);
   }
 
@@ -125,7 +126,7 @@ export class ProductController {
     type: ProductResponseDto,
   })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseCuidPipe) id: string,
     @Body() updateProductDto: UpdateProductDto,
   ): Promise<ProductResponseDto> {
     const product = await this.productService.update(id, updateProductDto);
@@ -163,7 +164,7 @@ export class ProductController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Add review to product' })
   async addReview(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseCuidPipe) id: string,
     @CurrentUser('id') userId: string,
     @Body() createReviewDto: CreateReviewDto,
   ) {
@@ -184,7 +185,7 @@ export class ProductController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete product (Admin only)' })
   async remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseCuidPipe) id: string,
     @Query('hardDelete') hardDelete?: string,
   ): Promise<void> {
     await this.productService.remove(id, hardDelete !== 'true');
@@ -196,7 +197,7 @@ export class ProductController {
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Toggle product active status (Admin only)' })
-  async toggleActive(@Param('id', ParseUUIDPipe) id: string) {
+  async toggleActive(@Param('id', ParseCuidPipe) id: string) {
     const product = await this.productService.update(id, {
       isActive: undefined,
     });
