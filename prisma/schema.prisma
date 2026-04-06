@@ -34,10 +34,11 @@ model User {
   passwordReset PasswordReset?
   sessions      Session[]
 
-  createdAt     DateTime       @default(now()) @map("created_at")
-  updatedAt     DateTime       @updatedAt @map("updated_at")
-  couponUsers   CouponUser[]
-  notifications Notification[]
+  createdAt           DateTime       @default(now()) @map("created_at")
+  updatedAt           DateTime       @updatedAt @map("updated_at")
+  couponUsers         CouponUser[]
+  notifications       Notification[]
+  savedPaymentMethods Json?          @map("saved_payment_methods")
 
   @@map("users")
 }
