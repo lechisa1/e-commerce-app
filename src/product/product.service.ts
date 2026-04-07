@@ -34,6 +34,32 @@ export class ProductService {
       ...productData
     } = createProductDto;
 
+    const toNumber = (value: any): number => {
+      if (value === null || value === undefined) return 0;
+      if (typeof value === 'object' && value.toNumber) {
+        return value.toNumber();
+      }
+      const num = Number(value);
+      return isNaN(num) ? 0 : num;
+    };
+
+    const decimalFields = ['price', 'compareAtPrice', 'cost', 'weight', 'length', 'width', 'height'];
+    const sanitizedData: Record<string, any> = {};
+    for (const [key, value] of Object.entries(productData)) {
+      if (decimalFields.includes(key)) {
+        const num = toNumber(value);
+        if (num < 0) {
+          throw new BadRequestException(`${key} must be a positive number`);
+        }
+        if (num > 99999999.99) {
+          throw new BadRequestException(`${key} exceeds maximum allowed value (99999999.99)`);
+        }
+        sanitizedData[key] = num;
+      } else {
+        sanitizedData[key] = value;
+      }
+    }
+
     // Generate slug if not provided
     let productSlug = slug;
     if (!productSlug) {
@@ -65,8 +91,10 @@ export class ProductService {
           slug: productSlug,
           sku,
           categoryId: categoryId || null,
-          ...productData,
-        },
+          description: sanitizedData.description || '',
+          price: sanitizedData.price || 0,
+          ...sanitizedData,
+        } as any,
       });
 
       // Add images
@@ -99,7 +127,7 @@ export class ProductService {
           data: variants.map((variant: ProductVariantDto) => ({
             productId: newProduct.id,
             sku: variant.sku,
-            price: variant.price,
+            price: toNumber(variant.price),
             quantity: variant.quantity,
             attributes: variant.attributes || {},
           })),
@@ -441,6 +469,32 @@ export class ProductService {
       ...productData
     } = updateProductDto;
 
+    const toNumber = (value: any): number => {
+      if (value === null || value === undefined) return 0;
+      if (typeof value === 'object' && value.toNumber) {
+        return value.toNumber();
+      }
+      const num = Number(value);
+      return isNaN(num) ? 0 : num;
+    };
+
+    const decimalFields = ['price', 'compareAtPrice', 'cost', 'weight', 'length', 'width', 'height'];
+    const sanitizedData: Record<string, any> = {};
+    for (const [key, value] of Object.entries(productData)) {
+      if (decimalFields.includes(key)) {
+        const num = toNumber(value);
+        if (num < 0) {
+          throw new BadRequestException(`${key} must be a positive number`);
+        }
+        if (num > 99999999.99) {
+          throw new BadRequestException(`${key} exceeds maximum allowed value (99999999.99)`);
+        }
+        sanitizedData[key] = num;
+      } else if (value !== undefined) {
+        sanitizedData[key] = value;
+      }
+    }
+
     // Check slug uniqueness if being updated
     if (slug) {
       await this.checkUniqueSlug(slug, id);
@@ -457,7 +511,7 @@ export class ProductService {
       const updatedProduct = await prisma.product.update({
         where: { id },
         data: {
-          ...productData,
+          ...sanitizedData,
           ...(slug && { slug }),
           ...(sku && { sku }),
           ...(categoryId !== undefined && { categoryId: categoryId || null }),
@@ -509,11 +563,17 @@ export class ProductService {
         });
 
         if (variants.length > 0) {
+          const toNumber = (val: any): number => {
+            if (val === null || val === undefined) return 0;
+            if (typeof val === 'object' && 'toNumber' in val) return (val as any).toNumber();
+            const num = Number(val);
+            return isNaN(num) ? 0 : num;
+          };
           await prisma.productVariant.createMany({
             data: variants.map((variant: ProductVariantDto) => ({
               productId: id,
               sku: variant.sku,
-              price: variant.price,
+              price: toNumber(variant.price),
               quantity: variant.quantity,
               attributes: variant.attributes || {},
             })),

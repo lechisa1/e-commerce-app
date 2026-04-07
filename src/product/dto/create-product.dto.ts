@@ -5,15 +5,36 @@ import {
   IsNumber,
   IsArray,
   Min,
+  Max,
   MaxLength,
   MinLength,
   IsUrl,
   ValidateNested,
   ArrayMaxSize,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsCuid } from '../../common/decorators/is-cuid.decorator';
+
+const toNumber = (value: any): number | null => {
+  if (value === null || value === undefined) return null;
+  if (typeof value === 'object' && value !== null && 'toNumber' in value) {
+    return value.toNumber();
+  }
+  const num = Number(value);
+  return isNaN(num) ? null : num;
+};
+
+class DecimalTransformDecorator {
+  static fromValidators(min: number, max: number) {
+    return [
+      Transform(({ value }) => toNumber(value)),
+      IsNumber(),
+      Min(min),
+      Max(max),
+    ];
+  }
+}
 
 export class ProductImageDto {
   @ApiProperty({ example: 'https://example.com/image.jpg' })
@@ -57,6 +78,7 @@ export class ProductVariantDto {
   sku: string;
 
   @ApiProperty({ example: 29.99 })
+  @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @Min(0)
   price: number;
@@ -102,18 +124,21 @@ export class CreateProductDto {
   sku: string;
 
   @ApiProperty({ example: 999.99 })
+  @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @Min(0)
   price: number;
 
   @ApiPropertyOptional({ example: 1099.99 })
   @IsOptional()
+  @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @Min(0)
   compareAtPrice?: number;
 
   @ApiPropertyOptional({ example: 800.0 })
   @IsOptional()
+  @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @Min(0)
   cost?: number;
@@ -140,24 +165,28 @@ export class CreateProductDto {
 
   @ApiPropertyOptional({ example: 0.5 })
   @IsOptional()
+  @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @Min(0)
   weight?: number;
 
   @ApiPropertyOptional({ example: 10.0 })
   @IsOptional()
+  @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @Min(0)
   length?: number;
 
   @ApiPropertyOptional({ example: 5.0 })
   @IsOptional()
+  @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @Min(0)
   width?: number;
 
   @ApiPropertyOptional({ example: 2.0 })
   @IsOptional()
+  @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @Min(0)
   height?: number;

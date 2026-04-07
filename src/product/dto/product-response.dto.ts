@@ -1,14 +1,15 @@
-import { Expose, Transform } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 const toNumber = (value: any): number | null => {
   if (value === null || value === undefined) return null;
 
-  if (typeof value === 'object' && value.toNumber) {
+  if (typeof value === 'object' && value !== null && 'toNumber' in value) {
     return value.toNumber();
   }
 
-  return Number(value);
+  const num = Number(value);
+  return isNaN(num) ? null : num;
 };
 export class ProductImageResponseDto {
   @ApiProperty()

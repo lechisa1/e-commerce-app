@@ -13,6 +13,7 @@ import { ProductModule } from './product/product.module';
 import { CartModule } from './cart/cart.module';
 import { OrderModule } from './order/order.module';
 import { PaymentModule } from './payment/payment.module';
+import { CouponModule } from './coupon/coupon.module';
 @Module({
   imports: [
     PrismaModule,
@@ -24,6 +25,7 @@ import { PaymentModule } from './payment/payment.module';
     CartModule,
     OrderModule,
     PaymentModule,
+    CouponModule,
   ],
   controllers: [AppController],
   providers: [
